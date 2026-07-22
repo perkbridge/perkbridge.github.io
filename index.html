@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PerkBridge — Building on Solana</title>
+  <meta name="description" content="PerkBridge builds open-source projects on Solana infrastructure — fast, low-cost, on-chain." />
+
+  <meta property="og:title" content="PerkBridge — Building on Solana" />
+  <meta property="og:description" content="Open-source projects built on Solana infrastructure." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/logo.png" />
+
+  <link rel="icon" type="image/png" href="assets/logo-mark-t.png" />
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-soft: #f6f7f9;
+      --ink: #151621;        /* matches the logo charcoal */
+      --muted: #5c6270;
+      --line: #e8eaee;
+      --card: #ffffff;
+      --accent: #151621;      /* logo charcoal */
+      --accent-2: #4a4f5c;    /* lighter charcoal */
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+    /* accent gradient bar at very top */
+    .topbar { height: 4px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+
+    /* ---------- Nav ---------- */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 0;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 700; font-size: 18px; letter-spacing: -0.01em; }
+    .brand img { width: 38px; height: 38px; }
+    .nav-actions { display: flex; align-items: center; gap: 20px; }
+    .nav-link { color: var(--muted); text-decoration: none; font-size: 15px; font-weight: 500; transition: color .2s; }
+    .nav-link:hover { color: var(--ink); }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 16px; border-radius: 10px; font-size: 14px; font-weight: 600;
+      text-decoration: none; color: #fff; background: var(--ink);
+      transition: transform .15s, opacity .2s;
+    }
+    .nav-cta:hover { transform: translateY(-1px); opacity: .9; }
+    .nav-cta svg { width: 16px; height: 16px; }
+
+    /* ---------- Hero ---------- */
+    header.hero {
+      display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center;
+      padding: 64px 0 72px;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 13px; border: 1px solid var(--line); border-radius: 999px;
+      font-size: 13px; color: var(--muted); margin-bottom: 22px; background: var(--bg-soft);
+    }
+    .pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+    h1 { font-size: clamp(36px, 5.5vw, 58px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 800; margin-bottom: 20px; }
+    h1 .grad {
+      background: linear-gradient(100deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .lead { font-size: clamp(16px, 2vw, 19px); color: var(--muted); max-width: 520px; margin-bottom: 32px; }
+    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 13px 22px; border-radius: 12px; font-weight: 600; font-size: 15px;
+      text-decoration: none; transition: transform .15s, box-shadow .2s, background .2s;
+    }
+    .btn svg { width: 18px; height: 18px; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(21,22,33,.28); }
+    .btn-ghost { background: var(--bg-soft); color: var(--ink); border: 1px solid var(--line); }
+    .btn-ghost:hover { transform: translateY(-2px); background: #eef0f3; }
+
+    .hero-art { display: flex; justify-content: center; }
+    .hero-art .disc {
+      width: 340px; max-width: 100%; aspect-ratio: 1; border-radius: 50%;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 30px 70px -30px rgba(21,22,33,.28), 0 0 0 10px rgba(21,22,33,.03);
+    }
+    .hero-art img { width: 78%; height: 78%; object-fit: contain; }
+
+    /* ---------- Sections ---------- */
+    section { padding: 44px 0; }
+    .section-head { text-align: center; margin-bottom: 40px; }
+    .section-head h2 { font-size: clamp(26px, 4vw, 34px); letter-spacing: -0.02em; font-weight: 750; margin-bottom: 10px; }
+    .section-head p { color: var(--muted); max-width: 560px; margin: 0 auto; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 28px 24px; transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -24px rgba(21,22,33,.25); border-color: #dcdfe6; }
+    .card .ico {
+      width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      background: var(--bg-soft); border: 1px solid var(--line); margin-bottom: 16px; font-size: 22px;
+    }
+    .card h3 { font-size: 18px; margin-bottom: 8px; font-weight: 700; }
+    .card p { color: var(--muted); font-size: 15px; }
+
+    .projects { display: grid; gap: 14px; }
+    .project {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 22px 24px; text-decoration: none; color: inherit; transition: border-color .2s, box-shadow .2s;
+    }
+    .project:hover { border-color: #dcdfe6; box-shadow: 0 14px 34px -22px rgba(21,22,33,.28); }
+    .project .info h3 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+    .project .info p { color: var(--muted); font-size: 14px; }
+    .project .arrow { color: var(--muted); flex-shrink: 0; font-size: 20px; transition: transform .2s, color .2s; }
+    .project:hover .arrow { transform: translateX(4px); color: var(--accent); }
+    .badge {
+      display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+      padding: 3px 9px; border-radius: 6px; margin-left: 8px; vertical-align: middle;
+    }
+    .badge.open { background: var(--accent); color: #fff; }
+    .badge.closed { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+
+    footer {
+      text-align: center; padding: 56px 0 44px; color: var(--muted); font-size: 14px;
+      border-top: 1px solid var(--line); margin-top: 32px;
+    }
+    footer a { color: var(--ink); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+    .foot-links { display: flex; gap: 22px; justify-content: center; margin-bottom: 16px; }
+
+    @media (max-width: 760px) {
+      header.hero { grid-template-columns: 1fr; text-align: center; padding: 40px 0 52px; gap: 36px; }
+      .hero-art { order: -1; }
+      .lead { margin-left: auto; margin-right: auto; }
+      .cta-row { justify-content: center; }
+      .pill { margin-left: auto; margin-right: auto; }
+      .nav-link.hide-sm { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar"></div>
+  <div class="wrap">
+    <!-- NAV -->
+    <nav>
+      <div class="brand">
+        <img src="assets/logo-mark-t.png" alt="PerkBridge logo" />
+        <span>PerkBridge</span>
+      </div>
+      <div class="nav-actions">
+        <a class="nav-link hide-sm" href="#about">Why Solana</a>
+        <a class="nav-link hide-sm" href="#projects">Projects</a>
+        <a class="nav-cta" href="https://github.com/perkbridge" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="hero-copy">
+        <div class="pill"><span class="dot"></span> Building on Solana</div>
+        <h1>Building on <span class="grad">Solana infrastructure</span></h1>
+        <p class="lead">
+          PerkBridge builds fast, low-cost, on-chain applications and tooling on top of
+          the Solana network — a mix of open-source building blocks and in-house products.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://github.com/perkbridge" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+            Explore on GitHub
+          </a>
+          <a class="btn btn-ghost" href="#projects">View projects</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="disc"><img src="assets/logo-mark-t.png" alt="PerkBridge" /></div>
+      </div>
+    </header>
+
+    <!-- WHY SOLANA -->
+    <section id="about">
+      <div class="section-head">
+        <h2>Why Solana</h2>
+        <p>We choose Solana for performance-first, consumer-scale on-chain products.</p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="ico">⚡</div>
+          <h3>Fast &amp; scalable</h3>
+          <p>Sub-second finality and high throughput let our apps feel like web2 while staying fully on-chain.</p>
+        </div>
+        <div class="card">
+          <div class="ico">🪙</div>
+          <h3>Low cost</h3>
+          <p>Fractions-of-a-cent transaction fees make micro-interactions and real usage economically viable.</p>
+        </div>
+        <div class="card">
+          <div class="ico">🧩</div>
+          <h3>Composable</h3>
+          <p>We build modular programs and tooling that plug into the wider Solana ecosystem.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div class="section-head">
+        <h2>Projects</h2>
+        <p>A growing set of projects built on Solana infrastructure — spanning on-chain programs, developer tooling, and user-facing applications. Everything we make is designed to be fast, low-cost, and reliable at scale. Explore the work under the PerkBridge organization on GitHub.</p>
+      </div>
+      <div class="projects">
+        <a class="project" href="https://github.com/perkbridge" target="_blank" rel="noopener">
+          <div class="info">
+            <h3>Core Protocol</h3>
+            <p>On-chain Solana programs powering the PerkBridge platform.</p>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+        <a class="project" href="https://github.com/perkbridge" target="_blank" rel="noopener">
+          <div class="info">
+            <h3>SDK &amp; Tooling</h3>
+            <p>Client libraries and developer tools for building on top of our programs.</p>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+        <a class="project" href="https://github.com/perkbridge" target="_blank" rel="noopener">
+          <div class="info">
+            <h3>Applications</h3>
+            <p>User-facing products with wallet connection and on-chain interactions.</p>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="foot-links">
+        <a href="https://github.com/perkbridge" target="_blank" rel="noopener">GitHub</a>
+        <a href="#about">Why Solana</a>
+        <a href="#projects">Projects</a>
+      </div>
+      <p style="max-width: 620px; margin: 0 auto 10px; font-size: 13px; line-height: 1.55;">
+        PerkBridge is an independent project and is not affiliated with or endorsed by the
+        Solana Foundation. Solana is a trademark of the Solana Foundation.
+      </p>
+      <p>© <span id="year"></span> PerkBridge</p>
+    </footer>
+  </div>
+
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
